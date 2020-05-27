@@ -1,4 +1,4 @@
-name: provider_codegen
+name: state_codegen
 description: A new Flutter package project.
 version: 0.0.1
 author:
@@ -12,8 +12,8 @@ dependencies:
     sdk: flutter
 
   source_gen: ^0.9.5
-  provider_annotation:
-    path: ../provider_annotation
+  state_annotation:
+    path: ../state_annotation
 
 dev_dependencies:
   flutter_test:

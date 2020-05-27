@@ -3,7 +3,7 @@
 part of 'example_state.dart';
 
 // **************************************************************************
-// ProviderGenerator
+// StateGenerator
 // **************************************************************************
 
 class _$ExampleStateChangeNotifier {

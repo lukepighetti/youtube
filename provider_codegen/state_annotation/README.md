@@ -1,4 +1,4 @@
-# provider_annotation
+# state_annotation
 
 A new Flutter package project.
 

@@ -1,13 +1,13 @@
-library provider_codegen;
+library state_codegen;
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
-import 'package:provider_annotation/provider_annotation.dart';
+import 'package:state_annotation/state_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
-class ProviderGenerator extends GeneratorForAnnotation<StateClass> {
+class StateGenerator extends GeneratorForAnnotation<StateClass> {
   @override
   generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
@@ -28,8 +28,8 @@ class ProviderGenerator extends GeneratorForAnnotation<StateClass> {
 }
 
 /// The builder for [ProviderGenerator]
-Builder providerBuilder(BuilderOptions options) =>
-    PartBuilder([ProviderGenerator()], '.state.dart');
+Builder stateBuilder(BuilderOptions options) =>
+    PartBuilder([StateGenerator()], '.state.dart');
 
 /// Returns field getters on an element
 class GetterFieldVisitor extends SimpleElementVisitor {

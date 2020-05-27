@@ -11,16 +11,16 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.3
-  provider_annotation:
-    path: ../provider_annotation
+  state_annotation:
+    path: ../state_annotation
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   build_runner:
-  provider_codegen:
-    path: ../provider_codegen
+  state_codegen:
+    path: ../state_codegen
 
 flutter:
   uses-material-design: true

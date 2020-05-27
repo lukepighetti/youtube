@@ -1,6 +1,6 @@
 targets:
   $default:
     builders:
-      provider_codegen|provider_builder:
+      state_codegen|state_builder:
         generate_for:
           - lib/state/*.dart

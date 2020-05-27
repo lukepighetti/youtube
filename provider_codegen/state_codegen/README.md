@@ -1,4 +1,4 @@
-# provider_codegen
+# state_codegen
 
 A new Flutter package project.
 

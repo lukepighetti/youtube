@@ -1,4 +1,4 @@
-import 'package:provider_annotation/provider_annotation.dart';
+import 'package:state_annotation/state_annotation.dart';
 
 part 'example_state.state.dart';
 

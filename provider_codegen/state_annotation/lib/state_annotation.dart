@@ -1,4 +1,4 @@
-library provider_annotation;
+library state_annotation;
 
 class StateClass {
   const StateClass();
