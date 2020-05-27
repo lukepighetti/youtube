@@ -16,13 +16,19 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
 
     final lines = [
       "class _\$${visitor.className}ChangeNotifier extends ChangeNotifier {",
+      "  _\$${visitor.className}ChangeNotifier(this.sharedPreferences);",
+      "final SharedPreferences sharedPreferences;",
       for (var getter in visitor.getters.entries) ...[
         /// 1. Backing value
         "${getter.value.returnType} _${getter.key};",
 
-        /// 2. Reactive setter
+        /// 2. Storage key
+        "final _${getter.key}StorageKey = \"${visitor.className}.${getter.key}\";",
+
+        /// 3. Reactive setter
         "set ${getter.key} (${getter.value.returnType} e) {",
         "  _${getter.key} = e;",
+        "  sharedPreferences.setString(_${getter.key}StorageKey, e);", 
         "  notifyListeners();",
         "}",
       ],

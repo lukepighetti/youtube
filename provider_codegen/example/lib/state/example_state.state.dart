@@ -7,15 +7,13 @@ part of 'example_state.dart';
 // **************************************************************************
 
 class _$ExampleStateChangeNotifier extends ChangeNotifier {
+  _$ExampleStateChangeNotifier(this.sharedPreferences);
+  final SharedPreferences sharedPreferences;
   String _foo;
+  final _fooStorageKey = "ExampleState.foo";
   set foo(String e) {
     _foo = e;
-    notifyListeners();
-  }
-
-  bool _isAwesome;
-  set isAwesome(bool e) {
-    _isAwesome = e;
+    sharedPreferences.setString(_fooStorageKey, e);
     notifyListeners();
   }
 }
