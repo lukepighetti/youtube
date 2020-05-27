@@ -34,7 +34,12 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
         /// 3. Reactive setter
         "set ${getter.key} (${getter.value.returnType} e) {",
         "  _${getter.key} = e;",
-        "  sharedPreferences.set${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey, e);",
+
+        if (isSharedPreferencesCoreType(getter.value.returnType))
+          "  sharedPreferences.set${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey, e);"
+        else
+          "  sharedPreferences.setString(_${getter.key}StorageKey, jsonEncode(e.toJson()));",
+
         "  notifyListeners();",
         "}",
       ],
@@ -42,7 +47,10 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
       /// 4. Hydrate all fields
       "  hydrateFields() {",
       for (var getter in visitor.getters.entries) ...[
-        "  _${getter.key} = sharedPreferences.get${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey);"
+        if (isSharedPreferencesCoreType(getter.value.returnType))
+          "  _${getter.key} = sharedPreferences.get${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey);"
+        else
+          "  _${getter.key} = ${getter.value.returnType}.fromJson(jsonDecode(sharedPreferences.getString(_${getter.key}StorageKey)));"
       ],
       "  }",
       "}"
@@ -58,6 +66,15 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
     if (type.isDartCoreInt) return "Int";
     if (type.getDisplayString() == "List<String>") return "StringList";
     return "String";
+  }
+
+  bool isSharedPreferencesCoreType(DartType type) {
+    if (type.isDartCoreString) return true;
+    if (type.isDartCoreBool) return true;
+    if (type.isDartCoreDouble) return true;
+    if (type.isDartCoreInt) return true;
+    if (type.getDisplayString() == "List<String>") return true;
+    return false;
   }
 }
 

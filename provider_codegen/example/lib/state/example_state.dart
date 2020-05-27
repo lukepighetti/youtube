@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:state_annotation/state_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,35 +25,12 @@ class ExampleState extends _$ExampleStateChangeNotifier {
   @StateField()
   List<String> get list => _list;
 
-  // @StateField()
-  // bool get isAwesome => _isAwesome;
+  @StateField()
+  Json get json => _json;
 }
 
-class Template extends ChangeNotifier {
-  final SharedPreferences sharedPreferences;
+class Json {
+  Json.fromJson(Map<String, dynamic> e);
 
-  Template(this.sharedPreferences);
-
-  String get foo => _foo;
-
-  /// Generated code
-
-  /// 1. Create backing value
-  String _foo;
-
-  /// 3. Persist data to [SharedPreferences]
-  final _fooStorageKey = "ExampleState.foo";
-
-  /// 2. Create the reactive setter
-  set foo(String e) {
-    _foo = e;
-
-    sharedPreferences.setString(_fooStorageKey, e);
-    notifyListeners();
-  }
-
-  /// 4. Hydrate data from [SharedPreferences]
-  hydrateFields() {
-    _foo = sharedPreferences.getString(_fooStorageKey);
-  }
+  Map<String, dynamic> toJson() => {};
 }

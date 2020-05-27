@@ -51,11 +51,21 @@ class _$ExampleStateChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Json _json;
+  final _jsonStorageKey = "ExampleState.json";
+  set json(Json e) {
+    _json = e;
+    sharedPreferences.setString(_jsonStorageKey, jsonEncode(e.toJson()));
+    notifyListeners();
+  }
+
   hydrateFields() {
     _foo = sharedPreferences.getString(_fooStorageKey);
     _bar = sharedPreferences.getBool(_barStorageKey);
     _baz = sharedPreferences.getDouble(_bazStorageKey);
     _friends = sharedPreferences.getInt(_friendsStorageKey);
     _list = sharedPreferences.getStringList(_listStorageKey);
+    _json =
+        Json.fromJson(jsonDecode(sharedPreferences.getString(_jsonStorageKey)));
   }
 }
