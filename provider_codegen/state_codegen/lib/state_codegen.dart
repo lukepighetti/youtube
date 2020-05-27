@@ -34,7 +34,7 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
         /// 3. Reactive setter
         "set ${getter.key} (${getter.value.returnType} e) {",
         "  _${getter.key} = e;",
-        "  sharedPreferences.setString(_${getter.key}StorageKey, e);",
+        "  sharedPreferences.set${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey, e);",
         "  notifyListeners();",
         "}",
       ],
@@ -42,13 +42,22 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
       /// 4. Hydrate all fields
       "  hydrateFields() {",
       for (var getter in visitor.getters.entries) ...[
-        "  _${getter.key} = sharedPreferences.getString(_${getter.key}StorageKey);"
+        "  _${getter.key} = sharedPreferences.get${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey);"
       ],
       "  }",
       "}"
     ];
 
     return lines.join("");
+  }
+
+  String sharedPreferencesMethod(DartType type) {
+    if (type.isDartCoreString) return "String";
+    if (type.isDartCoreBool) return "Bool";
+    if (type.isDartCoreDouble) return "Double";
+    if (type.isDartCoreInt) return "Int";
+    if (type.getDisplayString() == "List<String>") return "StringList";
+    return "String";
   }
 }
 

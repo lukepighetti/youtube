@@ -19,16 +19,43 @@ class _$ExampleStateChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _bar;
+  bool _bar;
   final _barStorageKey = "ExampleState.bar";
-  set bar(String e) {
+  set bar(bool e) {
     _bar = e;
-    sharedPreferences.setString(_barStorageKey, e);
+    sharedPreferences.setBool(_barStorageKey, e);
+    notifyListeners();
+  }
+
+  double _baz;
+  final _bazStorageKey = "ExampleState.baz";
+  set baz(double e) {
+    _baz = e;
+    sharedPreferences.setDouble(_bazStorageKey, e);
+    notifyListeners();
+  }
+
+  int _friends;
+  final _friendsStorageKey = "ExampleState.friends";
+  set friends(int e) {
+    _friends = e;
+    sharedPreferences.setInt(_friendsStorageKey, e);
+    notifyListeners();
+  }
+
+  List<String> _list;
+  final _listStorageKey = "ExampleState.list";
+  set list(List<String> e) {
+    _list = e;
+    sharedPreferences.setStringList(_listStorageKey, e);
     notifyListeners();
   }
 
   hydrateFields() {
     _foo = sharedPreferences.getString(_fooStorageKey);
-    _bar = sharedPreferences.getString(_barStorageKey);
+    _bar = sharedPreferences.getBool(_barStorageKey);
+    _baz = sharedPreferences.getDouble(_bazStorageKey);
+    _friends = sharedPreferences.getInt(_friendsStorageKey);
+    _list = sharedPreferences.getStringList(_listStorageKey);
   }
 }

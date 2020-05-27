@@ -12,7 +12,16 @@ class ExampleState extends _$ExampleStateChangeNotifier {
   String get foo => _foo;
 
   @StateField()
-  String get bar => _bar;
+  bool get bar => _bar;
+
+  @StateField()
+  double get baz => _baz;
+
+  @StateField()
+  int get friends => _friends;
+
+  @StateField()
+  List<String> get list => _list;
 
   // @StateField()
   // bool get isAwesome => _isAwesome;
