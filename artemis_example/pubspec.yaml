@@ -11,12 +11,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.3
+  artemis:
+  http:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  artemis:
   build_runner:
   json_serializable:
 
