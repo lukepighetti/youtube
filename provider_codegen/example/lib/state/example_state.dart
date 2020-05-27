@@ -11,6 +11,9 @@ class ExampleState extends _$ExampleStateChangeNotifier {
   @StateField()
   String get foo => _foo;
 
+  @StateField()
+  String get bar => _bar;
+
   // @StateField()
   // bool get isAwesome => _isAwesome;
 }
@@ -39,4 +42,7 @@ class Template extends ChangeNotifier {
   }
 
   /// 4. Hydrate data from [SharedPreferences]
+  hydrateFields() {
+    _foo = sharedPreferences.getString(_fooStorageKey);
+  }
 }

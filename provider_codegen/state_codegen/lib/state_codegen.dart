@@ -16,8 +16,14 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
 
     final lines = [
       "class _\$${visitor.className}ChangeNotifier extends ChangeNotifier {",
-      "  _\$${visitor.className}ChangeNotifier(this.sharedPreferences);",
-      "final SharedPreferences sharedPreferences;",
+
+      /// Dependencies & hydration in constructor
+      "_\$${visitor.className}ChangeNotifier(this.sharedPreferences) {",
+      "  hydrateFields();",
+      "}",
+
+      "final SharedPreferences sharedPreferences;\n",
+
       for (var getter in visitor.getters.entries) ...[
         /// 1. Backing value
         "${getter.value.returnType} _${getter.key};",
@@ -28,10 +34,17 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
         /// 3. Reactive setter
         "set ${getter.key} (${getter.value.returnType} e) {",
         "  _${getter.key} = e;",
-        "  sharedPreferences.setString(_${getter.key}StorageKey, e);", 
+        "  sharedPreferences.setString(_${getter.key}StorageKey, e);",
         "  notifyListeners();",
         "}",
       ],
+
+      /// 4. Hydrate all fields
+      "  hydrateFields() {",
+      for (var getter in visitor.getters.entries) ...[
+        "  _${getter.key} = sharedPreferences.getString(_${getter.key}StorageKey);"
+      ],
+      "  }",
       "}"
     ];
 

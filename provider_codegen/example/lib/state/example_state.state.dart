@@ -7,7 +7,9 @@ part of 'example_state.dart';
 // **************************************************************************
 
 class _$ExampleStateChangeNotifier extends ChangeNotifier {
-  _$ExampleStateChangeNotifier(this.sharedPreferences);
+  _$ExampleStateChangeNotifier(this.sharedPreferences) {
+    hydrateFields();
+  }
   final SharedPreferences sharedPreferences;
   String _foo;
   final _fooStorageKey = "ExampleState.foo";
@@ -15,5 +17,18 @@ class _$ExampleStateChangeNotifier extends ChangeNotifier {
     _foo = e;
     sharedPreferences.setString(_fooStorageKey, e);
     notifyListeners();
+  }
+
+  String _bar;
+  final _barStorageKey = "ExampleState.bar";
+  set bar(String e) {
+    _bar = e;
+    sharedPreferences.setString(_barStorageKey, e);
+    notifyListeners();
+  }
+
+  hydrateFields() {
+    _foo = sharedPreferences.getString(_fooStorageKey);
+    _bar = sharedPreferences.getString(_barStorageKey);
   }
 }
