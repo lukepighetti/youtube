@@ -1,7 +1,11 @@
 library state_annotation;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+/// Annotates a state class that contains [StateField]s
+class StateClass {
+  const StateClass();
+}
+
+/// Annotates a state field for code generation
+class StateField {
+  const StateField();
 }
