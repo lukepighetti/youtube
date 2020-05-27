@@ -1,0 +1,7 @@
+builders:
+  provider_builder:
+    import: "package:provider_codegen/provider_codegen.dart"
+    builder_factories: ["providerBuilder"]
+    build_extensions: { ".dart": [".state.dart"] }
+    build_to: source
+    auto_apply: dependents

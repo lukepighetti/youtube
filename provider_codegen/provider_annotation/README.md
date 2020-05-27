@@ -1,4 +1,4 @@
-# provider_codegen_annotation
+# provider_annotation
 
 A new Flutter package project.
 
