@@ -25,18 +25,21 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
       "final SharedPreferences sharedPreferences;\n",
 
       for (var getter in visitor.getters.entries) ...[
-        /// 1. Backing value
+        /// Backing value
         "${getter.value.returnType} _${getter.key};",
 
-        /// 2. Storage key
+        /// Storage key
         "final _${getter.key}StorageKey = \"${visitor.className}.${getter.key}\";",
 
-        /// 3. Reactive setter
+        /// Reactive setter
         "set ${getter.key} (${getter.value.returnType} e) {",
         "  _${getter.key} = e;",
 
+        /// Persistence
         if (isSharedPreferencesCoreType(getter.value.returnType))
           "  sharedPreferences.set${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey, e);"
+
+        /// Unsupported type, assume it's `json_serializable`
         else
           "  sharedPreferences.setString(_${getter.key}StorageKey, jsonEncode(e.toJson()));",
 
@@ -49,9 +52,12 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
       for (var getter in visitor.getters.entries) ...[
         if (isSharedPreferencesCoreType(getter.value.returnType))
           "  _${getter.key} = sharedPreferences.get${sharedPreferencesMethod(getter.value.returnType)}(_${getter.key}StorageKey);"
+
+        /// Unsupported type, assume it's `json_serializable`
         else
           "  _${getter.key} = ${getter.value.returnType}.fromJson(jsonDecode(sharedPreferences.getString(_${getter.key}StorageKey)));"
       ],
+      " notifyListeners();",
       "  }",
       "}"
     ];
@@ -59,15 +65,19 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
     return lines.join("");
   }
 
+  /// Which `shared_preferences` methods should we use for this [DartType]?
   String sharedPreferencesMethod(DartType type) {
     if (type.isDartCoreString) return "String";
     if (type.isDartCoreBool) return "Bool";
     if (type.isDartCoreDouble) return "Double";
     if (type.isDartCoreInt) return "Int";
     if (type.getDisplayString() == "List<String>") return "StringList";
-    return "String";
+    return null;
   }
 
+  /// Is this [DartType] supported by `shared_preferences`?
+  ///
+  /// If not, we should probably pretend it's a `json_serializable` model
   bool isSharedPreferencesCoreType(DartType type) {
     if (type.isDartCoreString) return true;
     if (type.isDartCoreBool) return true;
@@ -77,11 +87,6 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
     return false;
   }
 }
-
-// set foo(String e) {
-//   _foo = e;
-//   notifyListeners();
-// }
 
 /// Dispatches build commands to [StateGenerator]
 Builder stateBuilder(BuilderOptions options) =>
