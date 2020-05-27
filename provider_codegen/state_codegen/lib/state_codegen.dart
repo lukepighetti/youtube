@@ -14,14 +14,29 @@ class StateGenerator extends GeneratorForAnnotation<StateClass> {
     final visitor = GetterFieldVisitor();
     element.visitChildren(visitor);
 
-    return [
-      "class _\$${visitor.className}ChangeNotifier {",
-      for (var getter in visitor.getters.entries)
+    final lines = [
+      "class _\$${visitor.className}ChangeNotifier extends ChangeNotifier {",
+      for (var getter in visitor.getters.entries) ...[
+        /// 1. Backing value
         "${getter.value.returnType} _${getter.key};",
+
+        /// 2. Reactive setter
+        "set ${getter.key} (${getter.value.returnType} e) {",
+        "  _${getter.key} = e;",
+        "  notifyListeners();",
+        "}",
+      ],
       "}"
     ];
+
+    return lines.join("");
   }
 }
+
+// set foo(String e) {
+//   _foo = e;
+//   notifyListeners();
+// }
 
 /// Dispatches build commands to [StateGenerator]
 Builder stateBuilder(BuilderOptions options) =>
